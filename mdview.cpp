@@ -90,7 +90,10 @@ class mdview
     // Constructors...
         template<typename... index_type>
         mdview(std::vector<data_type>& source, index_type... dimensions): source(source), extents(extractor(dimensions...)), order(sizeof...(dimensions)), element_count((dimensions * ...)){
-            // Set additional capacity for 'source' for potential accumulation operations.           
+            // Extents initializer check.
+            if ((dimensions * ...) != source.size()){
+                throw std::invalid_argument("Incongruous Extents Initializer Arguments!");
+            }         
             // Sets size of the position vector.
             position.resize(order);
         }

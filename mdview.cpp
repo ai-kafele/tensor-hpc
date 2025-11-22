@@ -1,18 +1,16 @@
 /* 
-The following is an implementation of a multi-array class. The main functionality is to provide
-a mapping from linearly stored memory into the space of a multi-dimensional
-array. This is intended as the base class for a general tensor class.
+The following is an implementation of a multi-array view. The class functions as a
+mapping from linearly stored memory into the space of a multi-dimensional view.
 
-The class object 'marray' containing a multi-array of doubles is defined with the statement:
+The class object 'mdview' acting upon an array of doubles is defined:
 
-marray<double> object_name(extent1, extent2, ... , extent'n');
+mdview object_name(std::vector<double> source, int extent1, int extent2, ...);
 
-Where the extent parameters are integer counts of the length of the array in each distinct 
-'dimension'. The above object would be of dimension n. If we were implementing a tensor it
-would be a tensor of order n.
+Where the 'source' object is the target to be viewed and the extent parameters are integer 
+counts of the length of the array in each distinct 'dimension'.
 
-There is a multi-indexed access and linearly indexed access via
-the data() member function and the data member lumen respectively.
+Multi-indexed access and linearly indexed access are provided via the overloaded 
+()operator and the internal reference to 'source' respectively.
 */
 
 #include <vector>
@@ -69,7 +67,7 @@ class mdview
         }
 
     // Extents extraction from parameter list: "std::size_t... dimensions".
-        template<typename... index_type>
+    template<typename... index_type>
         std::vector<std::size_t> extractor(index_type... args){
             return {std::forward<std::size_t>(args)...};
         }
